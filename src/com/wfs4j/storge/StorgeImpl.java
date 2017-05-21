@@ -28,10 +28,10 @@ public class StorgeImpl implements Storge {
 	}
 
 	@Override
-	public boolean getData(String name) {
+	public byte[] getData(String name) {
 		
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override

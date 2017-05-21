@@ -21,7 +21,7 @@ public interface Storge {
 
 	public boolean appendData(byte[] bs, String name, String fileType);
 
-	public boolean getData(String name);
+	public byte[] getData(String name);
 
 	public boolean delData(String name);
 
