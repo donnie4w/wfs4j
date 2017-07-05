@@ -1,36 +1,25 @@
 package com.wfs4j.log;
 
-import org.slf4j.LoggerFactory;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 /**
- * ClassName: Logger.java <br/>
- * date: 2017年5月17日 上午11:21:56 <br/>
- *
- * @author dong
- * @version
- * @since JDK 1.7
- * @classDesc 类描述:
+ * <p>@File:wfs4j: com.wfs4j.log :Logger.java
+ * <p>@Date:2017年6月30日
+ * <p>@Copyright (c) 2017, donnie4w@gmail.com All Rights Reserved.
+ * <p>@Author: dong
+ * <p>@Desc:
  */
 public class Logger {
 
-	org.slf4j.Logger logger;
-	String className;
+	java.util.logging.Logger logger;
 
 	private Logger(String cn) {
-		className = cn;
-		logger = LoggerFactory.getLogger(cn);
+		logger = java.util.logging.Logger.getLogger(cn);
 	}
 
 	public static Logger getLogger() {
 		return new Logger(java.lang.Thread.currentThread().getStackTrace()[2].getClassName());
-	}
-
-	public void debug(Object... args) {
-		logger.debug(objs2str(args));
-	}
-
-	public void debug(Object arg, Throwable e) {
-		logger.debug(String.valueOf(arg), e);
 	}
 
 	public void info(Object... args) {
@@ -38,33 +27,44 @@ public class Logger {
 	}
 
 	public void info(Object arg, Throwable e) {
-		logger.info(String.valueOf(arg), e);
+		logger.info(objs2str(String.valueOf(arg), e));
 	}
 
-	public void warn(Object... args) {
-		logger.warn(objs2str(args));
+	public void severe(Object... args) {
+		logger.severe(objs2str(args));
 	}
 
-	public void warn(Object arg, Throwable e) {
-		logger.warn(String.valueOf(arg), e);
-	}
-
-	public void error(Object... args) {
-		logger.error(objs2str(args));
-	}
-
-	public void error(Object arg, Throwable e) {
-		logger.error(String.valueOf(arg), e);
+	public void severe(Object arg, Throwable e) {
+		logger.severe(objs2str(String.valueOf(arg), e));
 	}
 
 	private static String objs2str(Object... args) {
-		if (args != null) {
-			StringBuilder sb = new StringBuilder();
-			for (Object o : args) {
-				sb.append(o).append(" ");
+		try {
+			if (args != null) {
+				StringBuilder sb = new StringBuilder();
+				for (Object o : args) {
+					if (o instanceof Throwable) {
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						((Throwable) o).printStackTrace(new PrintStream(baos));
+						String s = new String(baos.toByteArray());
+						baos.close();
+						sb.append(s).append(" ");
+					} else {
+						sb.append(String.valueOf(o)).append(" ");
+					}
+				}
+				return sb.toString();
 			}
-			return sb.toString();
+		} catch (Exception e) {
 		}
 		return "";
+	}
+
+	public static void main(String[] args) {
+		Logger log = Logger.getLogger();
+		log.info("testlog", "testlog2");
+		log.info("testErrorlog", new Exception("info Error"));
+		log.severe("testlog", "testlog2");
+		log.severe("testErrorlog", new Exception("error Error"));
 	}
 }
