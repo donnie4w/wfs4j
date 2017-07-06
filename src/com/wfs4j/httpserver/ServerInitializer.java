@@ -1,6 +1,8 @@
 package com.wfs4j.httpserver;
 
+import com.wfs4j.handler.GetHandler;
 import com.wfs4j.handler.MockRouteHandler;
+import com.wfs4j.handler.UploadHandler;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -30,5 +32,7 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
 		pipeline.addLast("aggegator", new HttpObjectAggregator(1024 * 1024 * 1024));
 		pipeline.addLast("handler", new ServerHandler());
 		Controller.addHandler("/mock", new MockRouteHandler());
+		Controller.addHandler("/u", new UploadHandler());
+		Controller.addHandler("/r", new GetHandler());
 	}
 }

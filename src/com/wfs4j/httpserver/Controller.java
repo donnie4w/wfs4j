@@ -54,7 +54,8 @@ public class Controller {
 					return false;
 				} else if (i == regexs.length - 1) {
 					String res = url.substring(url.indexOf("/", i - 1) + 1, url.length());
-					if (regexs[i].length() > 0 && !res.matches(regexs[i])) {
+					if (regexs[i].length() > 0 && !res.equals(regexs[i])
+							&& !res.startsWith(regexs[i].endsWith("/") ? regexs[i] : regexs[i] + "/")) {
 						return false;
 					}
 				}

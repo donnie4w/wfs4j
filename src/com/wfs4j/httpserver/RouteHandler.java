@@ -9,6 +9,7 @@
 
 package com.wfs4j.httpserver;
 
+import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpRequest;
 
 /**
@@ -21,5 +22,5 @@ import io.netty.handler.codec.http.HttpRequest;
  * @desc
  */
 public interface RouteHandler {
-	public byte[] handler(HttpRequest req, byte[] body);
+	public byte[] handler(HttpRequest request, HttpContent content);
 }

@@ -6,11 +6,8 @@ import static io.netty.handler.codec.http.HttpHeaderNames.CONTENT_TYPE;
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 
-import javax.xml.ws.Response;
-
 import com.wfs4j.exception.WfsException;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -22,13 +19,16 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpUtil;
 
 /**
- * ClassName: ServerHandler.java <br/>
- * date: 2017年5月17日 上午11:21:38 <br/>
- *
- * @author dong
- * @version
- * @since JDK 1.7
- * @classDesc 类描述:
+ * <p>
+ * @File:wfs4j: com.wfs4j.httpserver :ServerHandler.java
+ * <p>
+ * @Date:2017年5月17日
+ * <p>
+ * @Copyright (c) 2017, donnie4w@gmail.com All Rights Reserved.
+ * <p>
+ * @Author: dong
+ * <p>
+ * @Desc:
  */
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
@@ -43,14 +43,10 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 			}
 			if (msg instanceof HttpContent) {
 				HttpContent content = (HttpContent) msg;
-				ByteBuf buf = content.content();
-				byte[] body = new byte[buf.capacity()];
-				buf.readBytes(body);
-				buf.release();
 				RouteHandler rh = Controller.Route(uri);
 				byte[] bs = null;
 				if (rh != null) {
-					bs = rh.handler(request, body);
+					bs = rh.handler(request, content);
 				} else {
 					bs = "404".getBytes(io.netty.util.CharsetUtil.UTF_8);
 				}
